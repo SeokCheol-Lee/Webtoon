@@ -5,6 +5,8 @@ import com.example.webtoon.User.type.Authority;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,26 +25,21 @@ public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String oauth;
-    private String oauthId;
     @Column(unique = true)
     private String nickname;
     @Column(unique = true)
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Authority role;
     private boolean isDeleted;
-
-    private LocalDateTime verifyExpiredAt;
-    private String verificationCode;
-    private boolean verify;
 
     public static User from(SignUpForm form){
         return User.builder()
             .nickname(form.getNickname())
             .email(form.getEmail())
             .password(form.getPassword())
-            .verify(false)
+            .role(Authority.ROLE_USER)
             .build();
     }
 }

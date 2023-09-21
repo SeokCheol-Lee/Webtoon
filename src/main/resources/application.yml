@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/
+    url: jdbc:mysql://localhost:3306/Webtoon
     username: root
     password: 12
   batch:
@@ -22,5 +22,7 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
+  jwt:
+    secret: E73TUQAxc5QLtunXK2ShWlSg1mJxP5Ikb2VhC
   profiles:
     include: oauth
