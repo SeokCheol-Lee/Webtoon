@@ -35,7 +35,7 @@ public class AuthService {
             throw new GlobalException(ErrorCode.DELETED_ACCOUNT);
         }
         if(!passwordEncoder.matches(signInForm.getPassword(), user.getPassword())){
-            throw new GlobalException(ErrorCode.NO_MATCH_ACCOUNT_INFO);
+            throw new GlobalException(ErrorCode.NO_MATCH_PASSWORD);
         }
         return user;
     }
