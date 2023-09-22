@@ -21,7 +21,7 @@ public class WebtoonImg extends BaseEntity {
         this.imgUrl = url;
     }
 
-    public static WebtoonImg of(String url, Long order){
+    public static WebtoonImg of(String url){
         return new WebtoonImg(url);
     }
 }

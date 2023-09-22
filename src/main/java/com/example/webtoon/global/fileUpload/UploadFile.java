@@ -22,6 +22,6 @@ public class UploadFile {
   }
 
   public WebtoonImg toWebtoonImage() {
-    return WebtoonImg.of(storeFileName, order);
+    return WebtoonImg.of(storeFileName);
   }
 }

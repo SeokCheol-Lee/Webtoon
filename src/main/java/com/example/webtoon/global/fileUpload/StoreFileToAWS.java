@@ -60,12 +60,8 @@ public class StoreFileToAWS implements StoreFile {
     } catch (IOException exception) {
       throw new GlobalException(ErrorCode.FAIL_TO_UPLOAD_FILE);
     }
-
-    return UploadFile.of(multipartFile.getOriginalFilename(), storeFileName);
-  }
-
-  public String responseFileUrl(UploadFile uploadFile){
-    return s3Client.getUrl(bucketName,uploadFile.getStoreFileName()).toString();
+    String url = s3Client.getUrl(bucketName,storeFileName).toString();
+    return UploadFile.of(multipartFile.getOriginalFilename(), url);
   }
 
   @Override

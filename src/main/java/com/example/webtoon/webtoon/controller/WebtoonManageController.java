@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,8 +37,8 @@ public class WebtoonManageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadWebtoon(@RequestBody UploadWebtoonRequest request,
-        List<MultipartFile> imgs, @AuthenticationPrincipal UserDetails user){
+    public ResponseEntity<String> uploadWebtoon(@RequestPart("request") UploadWebtoonRequest request,
+        @RequestPart("images") List<MultipartFile> imgs, @AuthenticationPrincipal UserDetails user){
         this.webtoonManageService.uploadWebtoonChapter(user.getUsername(),request,imgs);
         return ResponseEntity.ok("업로드 성공");
     }
