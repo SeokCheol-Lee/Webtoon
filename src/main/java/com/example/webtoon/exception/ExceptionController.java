@@ -11,19 +11,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 @Slf4j
 public class ExceptionController {
+
     @ExceptionHandler({
         GlobalException.class
     })
-    public ResponseEntity<ExceptionResponse> customRequestException(final GlobalException c){
+    public ResponseEntity<ExceptionResponse> customRequestException(final GlobalException c) {
         log.warn("api Exception : {}", c.getErrorCode());
-        return ResponseEntity.badRequest().body(new ExceptionResponse(c.getMessage(), c.getErrorCode()));
+        return ResponseEntity.badRequest()
+            .body(new ExceptionResponse(c.getMessage(), c.getErrorCode()));
     }
 
 
     @Getter
     @ToString
     @AllArgsConstructor
-    public static class ExceptionResponse{
+    public static class ExceptionResponse {
+
         private String message;
         private ErrorCode errorCode;
     }

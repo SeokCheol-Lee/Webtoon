@@ -1,6 +1,5 @@
 package com.example.webtoon.User.security;
 
-import com.example.webtoon.User.service.AuthService;
 import com.example.webtoon.User.service.PrincipalService;
 import com.example.webtoon.User.type.Authority;
 import io.jsonwebtoken.Claims;
@@ -19,47 +18,53 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
-  private static final long TOKEN_EXPIRE_TIME = 1000*60*60*6; // token 기간 6시간
-  private final PrincipalService principalService;
-  private static final String KEY_ROLE = "role";
 
-  @Value("${spring.jwt.secret}")
-  private String secretKey;
-  public String generateToken(String email, Authority authority){
-    Claims claims = Jwts.claims().setSubject(email);
-    claims.put(KEY_ROLE, authority);
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 6; // token 기간 6시간
+    private final PrincipalService principalService;
+    private static final String KEY_ROLE = "role";
 
-    var now = new Date();
-    var expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
+    @Value("${spring.jwt.secret}")
+    private String secretKey;
 
-    return Jwts.builder()
-        .setClaims(claims)
-        .setIssuedAt(now)
-        .setExpiration(expiredDate)
-        .signWith(SignatureAlgorithm.HS256, this.secretKey)
-        .compact();
-  }
-  public Authentication getAuthentication(String jwt){
-    UserDetails userDetails = this.principalService.loadUserByUsername(this.getUserId(jwt));
-    return new UsernamePasswordAuthenticationToken(
-        userDetails, "",userDetails.getAuthorities());
-  }
+    public String generateToken(String email, Authority authority) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put(KEY_ROLE, authority);
 
-  public String getUserId(String token){
-    return this.parseClaims(token).getSubject();
-  }
-  public boolean validateToken(String token){
-    if(!StringUtils.hasText(token)) return false;
+        var now = new Date();
+        var expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
-    var claims = this.parseClaims(token);
-    return !claims.getExpiration().before(new Date());
-  }
-
-  private Claims parseClaims(String token){
-    try{
-      return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
-    }catch (ExpiredJwtException e){
-      return e.getClaims();
+        return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(expiredDate)
+            .signWith(SignatureAlgorithm.HS256, this.secretKey)
+            .compact();
     }
-  }
+
+    public Authentication getAuthentication(String jwt) {
+        UserDetails userDetails = this.principalService.loadUserByUsername(this.getUserId(jwt));
+        return new UsernamePasswordAuthenticationToken(
+            userDetails, "", userDetails.getAuthorities());
+    }
+
+    public String getUserId(String token) {
+        return this.parseClaims(token).getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        if (!StringUtils.hasText(token)) {
+            return false;
+        }
+
+        var claims = this.parseClaims(token);
+        return !claims.getExpiration().before(new Date());
+    }
+
+    private Claims parseClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 }

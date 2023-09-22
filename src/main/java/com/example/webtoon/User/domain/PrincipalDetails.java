@@ -7,11 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class PrincipalDetails implements UserDetails{
+public class PrincipalDetails implements UserDetails {
 
     private User user;
 
-    public PrincipalDetails(User user){
+    public PrincipalDetails(User user) {
         this.user = user;
     }
 

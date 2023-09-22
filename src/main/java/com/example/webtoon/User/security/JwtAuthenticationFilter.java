@@ -20,35 +20,34 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  public static final String TOKEN_HEADER = "Authorization";
-  public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
 
-  private final TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-      FilterChain filterChain) throws ServletException, IOException {
-    String token = this.resolveTokenFromRequest(request);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
+        String token = this.resolveTokenFromRequest(request);
 
-    if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
-      Authentication auth = tokenProvider.getAuthentication(token);
-      SecurityContextHolder.getContext().setAuthentication(auth);
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+            Authentication auth = tokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-      log.info("auth : " + auth.getAuthorities());
+            log.info("auth : " + auth.getAuthorities());
 
-      log.info(String.format("[%s] -> %s",this.tokenProvider.getUserId(token),
-          request.getRequestURI()));
+            log.info("[{}] -> {}", this.tokenProvider.getUserId(token), request.getRequestURI());
+        }
+        filterChain.doFilter(request, response);
     }
-    filterChain.doFilter(request,response);
-  }
 
-  private String resolveTokenFromRequest(HttpServletRequest request){
-    String token = request.getHeader(TOKEN_HEADER);
+    private String resolveTokenFromRequest(HttpServletRequest request) {
+        String token = request.getHeader(TOKEN_HEADER);
 
-    if((ObjectUtils.isEmpty(token) || token.startsWith(TOKEN_PREFIX)) && token != null){
-      return token.substring(TOKEN_PREFIX.length());
+        if ((ObjectUtils.isEmpty(token) || token.startsWith(TOKEN_PREFIX)) && token != null) {
+            return token.substring(TOKEN_PREFIX.length());
+        }
+        return "";
     }
-    return "";
-  }
 }

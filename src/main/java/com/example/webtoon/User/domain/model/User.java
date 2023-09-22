@@ -2,7 +2,6 @@ package com.example.webtoon.User.domain.model;
 
 import com.example.webtoon.User.domain.dto.SignUpForm;
 import com.example.webtoon.User.type.Authority;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,7 +20,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +34,7 @@ public class User extends BaseEntity{
     private Authority role;
     private boolean isDeleted;
 
-    public static User from(SignUpForm form){
+    public static User from(SignUpForm form) {
         return User.builder()
             .nickname(form.getNickname())
             .email(form.getEmail())
