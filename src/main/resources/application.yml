@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/Webtoon
+    username: root
+    password: 12
+  batch:
+    jdbc:
+      initialize-schema: always
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+  jpa:
+    show-sql: true
+    database: mysql
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+  jwt:
+    secret: E73TUQAxc5QLtunXK2ShWlSg1mJxP5Ikb2VhC
+  profiles:
+    include: oauth
