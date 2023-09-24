@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class UploadFile {
   private String uploadFileName;
   private String storeFileName;
-  private Long order;
 
   public UploadFile(String uploadFileName, String storeFileName) {
     this.uploadFileName = uploadFileName;

@@ -57,7 +57,7 @@ public class WebtoonManageService {
         Webtoon webtoon = webtoonRepository.findByWebtoonName(request.getWebtoonName())
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_WEBTOON));
         if(webtoon.getAuthor() != user){
-            new GlobalException(ErrorCode.DENIED_ACCESS_PERMISSION);
+            throw new GlobalException(ErrorCode.DENIED_ACCESS_PERMISSION);
         }
         List<UploadFile> uploadFiles = storeFile.storeFiles(imgs,request.getWebtoonName(),
             request.getChapterName());

@@ -15,10 +15,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void registerAuthor(String email){
+    public User registerAuthor(String email){
         User user = userRepository.findUserByEmail(email)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
         user.changeRole();
+        return user;
     }
 
 }
