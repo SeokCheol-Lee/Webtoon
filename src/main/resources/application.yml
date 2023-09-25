@@ -20,9 +20,9 @@ spring:
         format_sql: true
         show_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     open-in-view: false
   jwt:
     secret: E73TUQAxc5QLtunXK2ShWlSg1mJxP5Ikb2VhC
   profiles:
-    include: oauth
+    include: aws
