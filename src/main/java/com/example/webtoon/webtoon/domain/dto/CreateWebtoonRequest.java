@@ -11,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class CreateWebtoonRequest {
+    private Long id;
     private String webtoonName;
     private Day uploadDay;
     @Builder.Default

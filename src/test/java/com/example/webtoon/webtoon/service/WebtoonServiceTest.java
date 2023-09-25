@@ -40,7 +40,7 @@ class WebtoonServiceTest {
     @Test
     void getWebtoon() {
         //given
-        given(webtoonRepository.findByWebtoonName(any()))
+        given(webtoonRepository.findById(any()))
             .willReturn(Optional.ofNullable(webtoon));
         //when
         Webtoon serviceWebtoon = webtoonService.getWebtoon(any());
@@ -53,11 +53,11 @@ class WebtoonServiceTest {
     @Test
     void getWebtoon_NotFoundWebtoon() {
         //given
-        given(webtoonRepository.findByWebtoonName(any()))
+        given(webtoonRepository.findById(any()))
             .willReturn(Optional.empty());
         //when
         GlobalException exception = assertThrows(GlobalException.class,
-            () -> webtoonService.getWebtoon("test"));
+            () -> webtoonService.getWebtoon(3L));
         //then
         assertEquals(ErrorCode.NOT_FOUND_WEBTOON, exception.getErrorCode());
     }

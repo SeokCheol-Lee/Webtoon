@@ -18,7 +18,7 @@ public class UserService {
     public User registerAuthor(String email){
         User user = userRepository.findUserByEmail(email)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
-        user.changeRole();
+        user.changeToAuthorRole();
         return user;
     }
 

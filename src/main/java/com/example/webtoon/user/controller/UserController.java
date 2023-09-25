@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/regist-author")
-    public ResponseEntity<String> ResgistAuthor(@AuthenticationPrincipal UserDetails user){
+    public ResponseEntity<String> RegisterAuthor(@AuthenticationPrincipal UserDetails user){
         userService.registerAuthor(user.getUsername());
         return ResponseEntity.ok("작가 추가 성공");
     }

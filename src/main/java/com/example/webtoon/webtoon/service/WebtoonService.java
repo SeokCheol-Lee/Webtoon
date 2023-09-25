@@ -15,8 +15,8 @@ public class WebtoonService {
     private final WebtoonRepository webtoonRepository;
 
     @Transactional
-    public Webtoon getWebtoon(String webtoonName){
-        Webtoon webtoon =  this.webtoonRepository.findByWebtoonName(webtoonName)
+    public Webtoon getWebtoon(Long id){
+        Webtoon webtoon =  this.webtoonRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_WEBTOON));
         return webtoon;
     }

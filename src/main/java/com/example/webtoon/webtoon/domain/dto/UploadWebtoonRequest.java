@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class UploadWebtoonRequest {
+    private Long id;
     private String webtoonName;
     private String chapterName;
 }

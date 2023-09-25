@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     private Authority role;
     private boolean isDeleted;
 
-    public void changeRole(){
+    public void changeToAuthorRole(){
         this.role = Authority.ROLE_AUTHOR;
     }
 

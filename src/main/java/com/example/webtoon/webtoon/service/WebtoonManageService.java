@@ -2,7 +2,7 @@ package com.example.webtoon.webtoon.service;
 
 import com.example.webtoon.global.exception.ErrorCode;
 import com.example.webtoon.global.exception.GlobalException;
-import com.example.webtoon.global.fileUpload.StoreFile;
+import com.example.webtoon.global.fileUpload.StoreFileClient;
 import com.example.webtoon.global.fileUpload.UploadFile;
 import com.example.webtoon.user.domain.model.User;
 import com.example.webtoon.user.domain.repository.UserRepository;
@@ -29,12 +29,16 @@ public class WebtoonManageService {
     private final UserRepository userRepository;
     private final WebtoonRepository webtoonRepository;
     private final WebtoonChapterRepository webtoonChapterRepository;
-    private final StoreFile storeFile;
+    private final StoreFileClient storeFileClient;
 
     @Transactional
     public Webtoon createWebtoon(CreateWebtoonRequest request, String email){
         User user = this.userRepository.findUserByEmail(email)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
+        boolean exists = this.webtoonRepository.existsByWebtoonName(request.getWebtoonName());
+        if(exists){
+            throw new GlobalException(ErrorCode.EXISTS_WEBTOONNAME);
+        }
         Set<WebtoonHashtag> hashtags = request.getHashtags().stream()
             .map(WebtoonHashtag::of)
             .collect(Collectors.toSet());
@@ -54,12 +58,12 @@ public class WebtoonManageService {
         List<MultipartFile> imgs){
         User user = userRepository.findUserByEmail(email)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
-        Webtoon webtoon = webtoonRepository.findByWebtoonName(request.getWebtoonName())
+        Webtoon webtoon = webtoonRepository.findById(request.getId())
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_WEBTOON));
         if(webtoon.getAuthor() != user){
             throw new GlobalException(ErrorCode.DENIED_ACCESS_PERMISSION);
         }
-        List<UploadFile> uploadFiles = storeFile.storeFiles(imgs,request.getWebtoonName(),
+        List<UploadFile> uploadFiles = storeFileClient.storeFiles(imgs,request.getWebtoonName(),
             request.getChapterName());
         List<WebtoonImg> webtoonImgs = uploadFiles.stream()
             .map(UploadFile::toWebtoonImage)

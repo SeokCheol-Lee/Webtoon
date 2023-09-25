@@ -16,7 +16,8 @@ public enum ErrorCode {
     NO_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "입력된 계정정보가 일치하지 않습니다."),
     NOT_FOUND_WEBTOON(HttpStatus.BAD_REQUEST,"일치하는 웹툰이 없습니다."),
     FAIL_TO_UPLOAD_FILE(HttpStatus.BAD_REQUEST,"파일 업로드에 실패했습니다."),
-    DENIED_ACCESS_PERMISSION(HttpStatus.BAD_REQUEST,"접근이 거부되었습니다.");
+    DENIED_ACCESS_PERMISSION(HttpStatus.BAD_REQUEST,"접근이 거부되었습니다."),
+    EXISTS_WEBTOONNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 웹툰 이름입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

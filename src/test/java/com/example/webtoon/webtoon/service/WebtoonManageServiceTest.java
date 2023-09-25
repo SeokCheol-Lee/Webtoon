@@ -7,11 +7,10 @@ import static org.mockito.Mockito.verify;
 
 import com.example.webtoon.global.exception.ErrorCode;
 import com.example.webtoon.global.exception.GlobalException;
-import com.example.webtoon.global.fileUpload.StoreFile;
+import com.example.webtoon.global.fileUpload.StoreFileClient;
 import com.example.webtoon.global.fileUpload.UploadFile;
 import com.example.webtoon.user.domain.model.User;
 import com.example.webtoon.user.domain.repository.UserRepository;
-import com.example.webtoon.user.service.AuthService;
 import com.example.webtoon.webtoon.domain.dto.CreateWebtoonRequest;
 import com.example.webtoon.webtoon.domain.dto.UploadWebtoonRequest;
 import com.example.webtoon.webtoon.domain.model.Webtoon;
@@ -20,7 +19,6 @@ import com.example.webtoon.webtoon.domain.repository.WebtoonChapterRepository;
 import com.example.webtoon.webtoon.domain.repository.WebtoonRepository;
 import com.example.webtoon.webtoon.domain.tyoe.Day;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +42,7 @@ class WebtoonManageServiceTest {
     @Mock
     private WebtoonRepository webtoonRepository;
     @Mock
-    private StoreFile storeFile;
+    private StoreFileClient storeFileClient;
     private final User user = User.builder()
         .id(1L)
         .nickname("test")
@@ -78,6 +76,25 @@ class WebtoonManageServiceTest {
         assertEquals(user,webtoon.getAuthor());
         assertEquals(request.getWebtoonName(),webtoon.getWebtoonName());
     }
+    @DisplayName("웹툰 생성 실패 - 이미 동일한 이름의 웹툰이 존재")
+    @Test
+    void createWebtoon_ExistName() {
+        //given
+        given(userRepository.findUserByEmail(any()))
+            .willReturn(Optional.ofNullable(user));
+        given(webtoonRepository.existsByWebtoonName(any()))
+            .willReturn(true);
+        CreateWebtoonRequest request = CreateWebtoonRequest.builder()
+            .webtoonName("test")
+            .uploadDay(Day.MON)
+            .hashtags(hashtags)
+            .build();
+        //when
+        GlobalException exception = assertThrows(GlobalException.class,
+            () -> webtoonManageService.createWebtoon(request, user.getEmail()));
+        //then
+        assertEquals(ErrorCode.EXISTS_WEBTOONNAME, exception.getErrorCode());
+    }
 
     @Test
     void uploadWebtoonChapter() {
@@ -87,9 +104,9 @@ class WebtoonManageServiceTest {
         uploadFileList.add(uploadFile);
         given(userRepository.findUserByEmail(any()))
             .willReturn(Optional.ofNullable(user));
-        given(webtoonRepository.findByWebtoonName(any()))
+        given(webtoonRepository.findById(any()))
             .willReturn(Optional.ofNullable(webtoon));
-        given(storeFile.storeFiles(any(),any(),any()))
+        given(storeFileClient.storeFiles(any(),any(),any()))
             .willReturn(uploadFileList);
         given(webtoonChapterRepository.countByWebtoon(any()))
             .willReturn(2);
@@ -126,7 +143,7 @@ class WebtoonManageServiceTest {
         uploadFileList.add(uploadFile);
         given(userRepository.findUserByEmail(any()))
             .willReturn(Optional.ofNullable(user));
-        given(webtoonRepository.findByWebtoonName(any()))
+        given(webtoonRepository.findById(any()))
             .willReturn(Optional.ofNullable(webtoon2));
         UploadWebtoonRequest request = UploadWebtoonRequest.builder()
             .webtoonName("test")

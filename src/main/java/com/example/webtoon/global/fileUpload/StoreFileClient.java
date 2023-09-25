@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface StoreFile {
+public interface StoreFileClient {
 
   /**
    * 해당 파일을 반환합니다.

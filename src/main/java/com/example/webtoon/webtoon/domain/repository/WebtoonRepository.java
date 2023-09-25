@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WebtoonRepository extends JpaRepository<Webtoon,Long> {
-    Optional<Webtoon> findByWebtoonName(String name);
+    boolean existsByWebtoonName(String name);
 }

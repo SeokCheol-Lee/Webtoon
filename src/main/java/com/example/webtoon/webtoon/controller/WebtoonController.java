@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +21,9 @@ public class WebtoonController {
     private final WebtoonService webtoonService;
 
     @Transactional
-    @GetMapping("/search/{name}")
-    public ResponseEntity<WebtoonDto> searchWebtoon(@PathVariable String name){
-        Webtoon webtoon = webtoonService.getWebtoon(name);
+    @GetMapping("/search")
+    public ResponseEntity<WebtoonDto> searchWebtoon(@RequestParam Long id){
+        Webtoon webtoon = webtoonService.getWebtoon(id);
         return ResponseEntity.ok(WebtoonDto.from(webtoon));
     }
 }
