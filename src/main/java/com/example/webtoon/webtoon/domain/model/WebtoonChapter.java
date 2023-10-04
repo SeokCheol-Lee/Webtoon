@@ -3,6 +3,7 @@ package com.example.webtoon.webtoon.domain.model;
 import com.example.webtoon.global.domain.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,4 +35,8 @@ public class WebtoonChapter extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "WEBTOONCHAPTER_ID")
     private List<WebtoonImg> webtoonImgs = new ArrayList<>();
+
+    public List<String> getWebtoonImgAsStringList(){
+        return webtoonImgs.stream().map(WebtoonImg::getImgUrl).collect(Collectors.toList());
+    }
 }

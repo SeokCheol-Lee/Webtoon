@@ -24,5 +24,8 @@ spring:
     open-in-view: false
   jwt:
     secret: E73TUQAxc5QLtunXK2ShWlSg1mJxP5Ikb2VhC
+  redis:
+    host: localhost
+    port: 6379
   profiles:
     include: aws
