@@ -1,8 +1,8 @@
 package com.example.webtoon.global.redis;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -11,30 +11,23 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RedisDao {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<Object, Object> redisTemplate;
 
-    public void setValues(String key, String data) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data);
+    public void setLongValue(Long key, Long data){
+        ValueOperations<Object, Object> value = redisTemplate.opsForValue();
+        value.set(key,data);
     }
 
-    public void setValuesList(String key, String data) {
-        redisTemplate.opsForList().rightPushAll(key,data);
+    public void setValuesHash(String key, String hashkey, Long data) {
+        redisTemplate.opsForHash().put(key,hashkey,data);
     }
 
-    public List<String> getValuesList(String key) {
-        Long len = redisTemplate.opsForList().size(key);
-        return len == 0 ? new ArrayList<>() : redisTemplate.opsForList().range(key, 0, len-1);
+    public Map<Object, Object> getValuesHash(String key) {
+        return redisTemplate.opsForHash().entries(key);
     }
 
-    public void setValues(String key, String data, Duration duration) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data, duration);
-    }
-
-    public String getValues(String key) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(key);
+    public Long getLongValue(Long key){
+        return Long.valueOf(Objects.requireNonNull(redisTemplate.opsForValue().get(key)).toString());
     }
 
     public void deleteValues(String key) {

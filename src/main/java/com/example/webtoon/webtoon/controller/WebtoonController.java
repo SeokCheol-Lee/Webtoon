@@ -4,12 +4,14 @@ import com.example.webtoon.webtoon.domain.dto.WebtoonChapterInfo;
 import com.example.webtoon.webtoon.domain.dto.WebtoonDto;
 import com.example.webtoon.webtoon.domain.dto.WebtoonInfo;
 import com.example.webtoon.webtoon.domain.model.Webtoon;
-import com.example.webtoon.webtoon.domain.model.WebtoonChapter;
 import com.example.webtoon.webtoon.service.WebtoonService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +43,10 @@ public class WebtoonController {
 
     @Transactional
     @GetMapping("/list")
-    public ResponseEntity<List<WebtoonChapterInfo>> getWebtoonChapters(@RequestParam Long webtoonId){
-        List<WebtoonChapterInfo> webtoonChapters = webtoonService.getWebtoonChapters(webtoonId);
+    public ResponseEntity<Page<WebtoonChapterInfo>> getWebtoonChapters(@RequestParam Long webtoonId
+    , @PageableDefault(size = 10) Pageable pageable){
+        Page<WebtoonChapterInfo> webtoonChapters = webtoonService
+            .getWebtoonChapters(webtoonId,pageable);
         return ResponseEntity.ok(webtoonChapters);
     }
 
@@ -50,7 +54,8 @@ public class WebtoonController {
     @GetMapping("/detail")
     public ResponseEntity<WebtoonChapterInfo> getWebtoon(HttpServletRequest request, @RequestParam Long id){
         String ipAddress = request.getRemoteAddr();
-        WebtoonChapterInfo webtoonChapter = webtoonService.getWebtoonChapter(id, ipAddress);
+        WebtoonChapterInfo webtoonChapter = webtoonService
+            .getWebtoonChapter(id, ipAddress);
         return ResponseEntity.ok(webtoonChapter);
     }
 }

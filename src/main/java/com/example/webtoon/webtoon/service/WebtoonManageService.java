@@ -53,8 +53,7 @@ public class WebtoonManageService {
                 .viewCount(0L)
                 .starScore(0.0)
                 .build());
-        String redisKey = String.valueOf(webtoon.getId());
-        redisDao.setValues(redisKey, "0");
+        redisDao.setLongValue(webtoon.getId(), 0L);
         return webtoon;
     }
 
