@@ -18,7 +18,8 @@ public enum ErrorCode {
     FAIL_TO_UPLOAD_FILE(HttpStatus.BAD_REQUEST,"파일 업로드에 실패했습니다."),
     DENIED_ACCESS_PERMISSION(HttpStatus.BAD_REQUEST,"접근이 거부되었습니다."),
     EXISTS_WEBTOONNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 웹툰 이름입니다."),
-    NO_EXISTS_WEBTOONCHAPTER(HttpStatus.BAD_REQUEST,"존재하지 않는 웹툰 챕터입니다.");
+    NO_EXISTS_WEBTOONCHAPTER(HttpStatus.BAD_REQUEST,"존재하지 않는 웹툰 챕터입니다."),
+    NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "일치하는 댓글이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
