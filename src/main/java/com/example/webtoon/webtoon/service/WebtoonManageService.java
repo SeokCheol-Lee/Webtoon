@@ -4,6 +4,7 @@ import com.example.webtoon.global.exception.ErrorCode;
 import com.example.webtoon.global.exception.GlobalException;
 import com.example.webtoon.global.fileUpload.StoreFileClient;
 import com.example.webtoon.global.fileUpload.UploadFile;
+import com.example.webtoon.global.redis.RedisDao;
 import com.example.webtoon.user.domain.model.User;
 import com.example.webtoon.user.domain.repository.UserRepository;
 import com.example.webtoon.webtoon.domain.dto.CreateWebtoonRequest;
@@ -30,6 +31,7 @@ public class WebtoonManageService {
     private final WebtoonRepository webtoonRepository;
     private final WebtoonChapterRepository webtoonChapterRepository;
     private final StoreFileClient storeFileClient;
+    private final RedisDao redisDao;
 
     @Transactional
     public Webtoon createWebtoon(CreateWebtoonRequest request, String email){
@@ -42,7 +44,7 @@ public class WebtoonManageService {
         Set<WebtoonHashtag> hashtags = request.getHashtags().stream()
             .map(WebtoonHashtag::of)
             .collect(Collectors.toSet());
-        return webtoonRepository.save(
+        Webtoon webtoon = webtoonRepository.save(
             Webtoon.builder()
                 .author(user)
                 .hashtags(hashtags)
@@ -51,6 +53,8 @@ public class WebtoonManageService {
                 .viewCount(0L)
                 .starScore(0.0)
                 .build());
+        redisDao.setLongValue(webtoon.getId(), 0L);
+        return webtoon;
     }
 
     @Transactional

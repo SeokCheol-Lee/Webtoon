@@ -17,6 +17,8 @@ public class WebtoonImg extends BaseEntity {
     private Long id;
     private String imgUrl;
 
+    public String getImgUrl(){return imgUrl;};
+
     private WebtoonImg(String url){
         this.imgUrl = url;
     }
