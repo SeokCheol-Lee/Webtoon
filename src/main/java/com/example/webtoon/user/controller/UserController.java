@@ -13,13 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Slf4j
 @RequestMapping("/user")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -33,13 +34,15 @@ public class UserController {
     }
 
     @GetMapping("/interestWebtoon")
-    public ResponseEntity<List<InterestWebtoonDto>> getInterestWebtoon(Long userId){
-        List<InterestWebtoonDto> interestWebtoons = interestWebtoonService.getInterestWebtoons(userId);
+    public ResponseEntity<List<InterestWebtoonDto>> getInterestWebtoon(@RequestParam Long userId){
+        List<InterestWebtoonDto> interestWebtoons = interestWebtoonService
+            .getInterestWebtoons(userId);
         return ResponseEntity.ok(interestWebtoons);
     }
 
     @PostMapping("interestWebtoon")
-    public ResponseEntity<String> createInterestWebtoon(Long userId, Long webtoonId){
+    public ResponseEntity<String> createInterestWebtoon(@RequestParam Long userId
+        ,@RequestParam Long webtoonId){
         this.interestWebtoonService.createInterestWebtoon(userId,webtoonId);
         return ResponseEntity.ok("Success");
     }
