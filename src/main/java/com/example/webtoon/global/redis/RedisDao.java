@@ -1,6 +1,7 @@
 package com.example.webtoon.global.redis;
 
 import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -22,6 +23,11 @@ public class RedisDao {
 
     public Map<Object, Object> getValuesHash(String key) {
         return redisTemplate.opsForHash().entries(key);
+    }
+
+    public Long getViewCount(Long key){
+        return Long.valueOf(Objects.requireNonNull(
+            redisTemplate.opsForValue().get(key)).toString());
     }
 
     public void countView(Long key){

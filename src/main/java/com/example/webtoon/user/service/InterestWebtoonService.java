@@ -31,8 +31,7 @@ public class InterestWebtoonService {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
         InterestWebtoon interestWebtoon = InterestWebtoon.of(user, webtoon);
-        boolean exists = this.interestWebtoonRepository.existsByWebtoonAndUser(webtoon, user);
-        if(!exists){
+        if(!this.interestWebtoonRepository.existsByWebtoonAndUser(webtoon, user)){
             this.interestWebtoonRepository.save(interestWebtoon);
         }else{
             this.interestWebtoonRepository.delete(interestWebtoon);

@@ -17,11 +17,10 @@ import com.example.webtoon.webtoon.domain.model.Webtoon;
 import com.example.webtoon.webtoon.domain.model.WebtoonChapter;
 import com.example.webtoon.webtoon.domain.repository.CommentRepository;
 import com.example.webtoon.webtoon.domain.repository.RecommendRepository;
-import com.example.webtoon.webtoon.domain.repository.StarScpreRepository;
+import com.example.webtoon.webtoon.domain.repository.StarScoreRepository;
 import com.example.webtoon.webtoon.domain.repository.WebtoonChapterRepository;
 import com.example.webtoon.webtoon.domain.repository.WebtoonRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +39,7 @@ public class WebtoonService {
     private final CommentRepository commentRepository;
     private final RecommendRepository recommendRepository;
     private final UserRepository userRepository;
-    private final StarScpreRepository starScpreRepository;
+    private final StarScoreRepository starScoreRepository;
 
     @Transactional
     public Webtoon getWebtoon(Long id){
@@ -133,7 +132,7 @@ public class WebtoonService {
         if(comment.getWriter() != user){
             throw new GlobalException(ErrorCode.DENIED_ACCESS_PERMISSION);
         }
-        comment.setIsDeleted(true);
+        commentRepository.delete(comment);
     }
 
     @Transactional
@@ -142,14 +141,14 @@ public class WebtoonService {
             .orElseThrow(() -> new GlobalException(ErrorCode.NO_EXISTS_WEBTOONCHAPTER));
         User user = this.userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_USER));
-        boolean exists = this.starScpreRepository.existsByUserAndWebtoonChapter(user, webtoonChapter);
+        boolean exists = this.starScoreRepository.existsByUserAndWebtoonChapter(user, webtoonChapter);
         if(exists){
-            StarScore star = this.starScpreRepository.findByUserAndWebtoonChapter(
+            StarScore star = this.starScoreRepository.findByUserAndWebtoonChapter(
                 user, webtoonChapter)
                 .orElseThrow(() -> new GlobalException(ErrorCode.DENIED_ACCESS_PERMISSION));
             star.setStarscore(starScore);
         }else{
-            this.starScpreRepository.save(StarScore.builder()
+            this.starScoreRepository.save(StarScore.builder()
                 .user(user)
                 .webtoonChapter(webtoonChapter)
                 .starscore(starScore)
