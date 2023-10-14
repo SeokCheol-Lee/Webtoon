@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -90,13 +91,13 @@ public class WebtoonController {
         return ResponseEntity.ok("Success");
     }
 
-    @PostMapping("/deleteComment")
+    @DeleteMapping("/deleteComment")
     public ResponseEntity<String> deleteComment(@RequestParam Long userId
         , @RequestParam Long commentId){
         webtoonService.deleteComment(userId,commentId);
         return ResponseEntity.ok("Success");
     }
-    @PostMapping("/StarScore")
+    @PostMapping("/star-score")
     public ResponseEntity<String> giveStarScore(@RequestParam Long webtoonChapterId,
         @RequestParam Long userId,@RequestParam Long starScore){
         webtoonService.giveStarScore(webtoonChapterId,userId,starScore);
