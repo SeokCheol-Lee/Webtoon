@@ -1,8 +1,8 @@
 package com.example.webtoon.global.batch;
 
-import com.example.webtoon.global.batch.tasklet.DailyTasklet;
-import com.example.webtoon.global.batch.tasklet.FiveMinutesTasklet;
-import com.example.webtoon.global.batch.tasklet.WeeklyTasklet;
+import com.example.webtoon.global.batch.tasklet.StarScoreTasklet;
+import com.example.webtoon.global.batch.tasklet.ViewCountTasklet;
+import com.example.webtoon.global.batch.tasklet.UserDeleteTasklet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BatchConfig {
 
-    private final FiveMinutesTasklet fiveMinutesTasklet;
-    private final DailyTasklet dailyTasklet;
-    private final WeeklyTasklet weeklyTasklet;
+    private final ViewCountTasklet viewCountTasklet;
+    private final StarScoreTasklet starScoreTasklet;
+    private final UserDeleteTasklet userDeleteTasklet;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -35,7 +35,7 @@ public class BatchConfig {
     @JobScope //Job 실행시점에 Bean이 생성됨
     public Step weeklyStep() {
         return stepBuilderFactory.get("weeklyStep")
-            .tasklet(weeklyTasklet)
+            .tasklet(userDeleteTasklet)
             .build();
     }
     @Bean
@@ -50,7 +50,7 @@ public class BatchConfig {
     @JobScope //Job 실행시점에 Bean이 생성됨
     public Step fiveMinutesStep() {
         return stepBuilderFactory.get("fiveMinutesStep")
-            .tasklet(fiveMinutesTasklet)
+            .tasklet(viewCountTasklet)
             .build();
     }
 
@@ -67,7 +67,7 @@ public class BatchConfig {
     @JobScope //Job 실행시점에 Bean이 생성됨
     public Step dailyStep() {
         return stepBuilderFactory.get("dailyStep")
-            .tasklet(dailyTasklet)
+            .tasklet(starScoreTasklet)
             .build();
     }
 }

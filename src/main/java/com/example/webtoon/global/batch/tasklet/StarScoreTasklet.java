@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @StepScope
 @Slf4j
-public class DailyTasklet implements Tasklet {
+public class StarScoreTasklet implements Tasklet {
 
     private final StarScoreRepository starScoreRepository;
     private final WebtoonRepository webtoonRepository;

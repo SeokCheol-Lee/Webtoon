@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @StepScope
 @Slf4j
-public class FiveMinutesTasklet implements Tasklet {
+public class ViewCountTasklet implements Tasklet {
 
     private final WebtoonRepository webtoonRepository;
     private final RedisDao redisDao;

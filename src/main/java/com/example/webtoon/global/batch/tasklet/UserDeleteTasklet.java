@@ -14,16 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 @StepScope // Step 시점에 Bean이 생성
 @Slf4j
-public class WeeklyTasklet implements Tasklet {
+public class UserDeleteTasklet implements Tasklet {
 
     private final UserRepository userRepository;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext){
-
-        log.info(contribution.toString());
-        log.info(chunkContext.toString());
-        log.info(">>>>> Delete User");
 
         userRepository.deleteAllByIdInQuery();
 
